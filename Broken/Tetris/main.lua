@@ -207,7 +207,12 @@ function love.load()
 					{ 0, 1, 0, 0 }	}
 	bcol[7] = { .8, .8, 0 }
 	bcol[8] = { .9, .9, .9 }
-	winw, winh = love.window.getMode()
+	if love._console_name ~= nil then
+		winw = 1280
+		winh = 720
+	else
+		winw, winh = love.window.getMode()
+	end
 	blocksize = winh / 21
 	edge = blocksize / 16
 	offsetx, offsety = (winw / 2) - (blocksize * 5), (winh / 2) - (blocksize * 10)
@@ -363,6 +368,33 @@ function love.touchpressed(id, x, y, dx, dy, pressure)
 end
 
 function love.touchreleased(id, x, y, dx, dy, pressure)
+	buttpressvisible = false
+end
+
+function love.gamepadpressed(joystick, button)
+    if button == 'start' then
+        love.event.quit()
+    end
+
+    key = ""
+    if button == "dpup" then key = "up" end
+    if button == "dpdown" then key = "down" end
+    if button == "dpright" then key = "right" end
+    if button == "dpleft" then key = "left" end
+
+	if key == 'left' or key == 'right' or key == 'down' then
+		buttpress = key
+		buttpressvisible = key
+	elseif key == ',' or key == 'up' then
+		buttpress = 'rotl'
+		buttpressvisible = 'rotl'
+	elseif key == '.' then
+		buttpress = 'rotr'
+		buttpressvisible = 'rotr'
+	end
+end
+
+function love.gamepadreleased()
 	buttpressvisible = false
 end
 
